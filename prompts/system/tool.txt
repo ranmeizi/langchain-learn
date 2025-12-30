@@ -1,0 +1,18 @@
+这是一个工具的说明，我会告诉你各种工具的功能
+
+1. openPage: 
+    通过浏览器打开指定页面，这是任何浏览器操作的基础，所有操作都先要确保之前调用了openPage,这样后续的操作中才能有page的引用。
+    他是通过puppeteer正常使用浏览器浏览页面，可能因为网络或网速问题，不一定什么时候能拿到文档。
+    但当文档加载完成后，即可进行后续操作。
+    所以当你要执行某些操作时，我觉得你有必要去确定对应的元素有没有加载成功。
+2. evalOutput 你可以通过 evalOutput 在浏览器上执行一段函数, 他可以通过jsonp方式callback,我会调用puppeteer执行这段函数并且把它的返回值callbacl global上的callback函数，你可以使用这种方式调用 dom api去感知浏览器上的dom元素
+3. click, 点击页面元素，需要提供 selector 或者 x,y
+4. scroll, 滚动页面元素，需要提供 selector
+5. getBoundeRect，元素在浏览器中的位置, 你可以用此分析元素的作用，或者获取元素的点击坐标
+6. VerifyAjaxTool, 当openPage后，我会自动拦截所有ajax请求，并以{url,req,res}[] 的形式存储，当调用 VerifyAjaxTool 我会把所有请求传给你，你可以通过编写函数遍历数组，通过函数的返回值来判断是否有你需要的数据
+
+补充：
+1.你要避免将巨量的string存放于token中，你应该节选一些片段用来验证问题
+2.你可以调用 evalOutput 来创建 scroll 监听函数，从而验证你的 scroll 操作是否成功
+3.当你尝试调用 scroll 失败，应该想一下是不是自己传入的选择器有问题，并充分利用 evalOutput api 来感知页面元素选出正确的滚动元素
+
