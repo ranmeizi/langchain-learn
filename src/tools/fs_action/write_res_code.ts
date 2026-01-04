@@ -4,9 +4,13 @@ import path from 'path'
 
 export const WriteResCodeTool = tool(
     // 实现函数：程序知道怎么执行
-    async ({ codeText, name }) => {
+    async ({ codeText, name }: { codeText: string; name: string }) => {
         console.log('[tool] writeResCode, codeText:', codeText, name)
-        fs.writeFileSync(path.resolve(__dirname,`./result/${name}.ts`), codeText)
+        const targetDir = path.resolve(process.cwd(), 'src/result')
+        const filePath = path.join(targetDir, `${name}.ts`)
+        fs.mkdirSync(targetDir, { recursive: true })
+        fs.writeFileSync(filePath, codeText, { encoding: 'utf8' })
+        return { path: filePath }
     },
 
     // 元数据：程序需要的信息
@@ -19,6 +23,7 @@ export const WriteResCodeTool = tool(
                 codeText: { type: "string" },
                 name: { type: "string" }
             },
+            required: ["codeText", "name"]
         }
     }
 );
